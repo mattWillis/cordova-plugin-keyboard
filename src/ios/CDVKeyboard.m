@@ -84,7 +84,7 @@
                                                              CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
                                                              CGRect intersection = CGRectIntersection(screen, keyboard);
                                                              CGFloat height = MIN(intersection.size.width, intersection.size.height);
-                                                             [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"Keyboard.fireOnShowing('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
+                                                             [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
             weakSelf.keyboardIsVisible = YES;
                                             }];
     _keyboardWillHideObserver = [nc addObserverForName:UIKeyboardWillHideNotification
@@ -96,7 +96,7 @@
                                                          CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
                                                          CGRect intersection = CGRectIntersection(screen, keyboard);
                                                          CGFloat height = MIN(intersection.size.width, intersection.size.height);
-                                                         [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"Keyboard.fireOnHiding('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
+                                                         [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
             weakSelf.keyboardIsVisible = NO;
                                             }];
 
