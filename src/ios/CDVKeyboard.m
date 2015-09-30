@@ -79,18 +79,24 @@
                                                 object:nil
                                                  queue:[NSOperationQueue mainQueue]
                                              usingBlock:^(NSNotification* notification) {
-                                                CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                                                keyboardFrame = [self.viewController.view convertRect:keyboardFrame fromView:nil];
-                                                             [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
+                                                [weakSelf performSelector:@selector(keyboardWillShow:) withObject:notification afterDelay:0];
+                                                             CGRect screen = [[UIScreen mainScreen] bounds];
+                                                             CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
+                                                             CGRect intersection = CGRectIntersection(screen, keyboard);
+                                                             CGFloat height = MIN(intersection.size.width, intersection.size.height);
+                                                             [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"Keyboard.fireOnShowing('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
             weakSelf.keyboardIsVisible = YES;
                                             }];
     _keyboardWillHideObserver = [nc addObserverForName:UIKeyboardWillHideNotification
                                                 object:nil
                                                  queue:[NSOperationQueue mainQueue]
                                             usingBlock:^(NSNotification* notification) {
-                                                CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                                                keyboardFrame = [self.viewController.view convertRect:keyboardFrame fromView:nil];
-                                                         [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
+                                                [weakSelf performSelector:@selector(keyboardWillHide:) withObject:notification afterDelay:0];
+                                                         CGRect screen = [[UIScreen mainScreen] bounds];
+                                                         CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
+                                                         CGRect intersection = CGRectIntersection(screen, keyboard);
+                                                         CGFloat height = MIN(intersection.size.width, intersection.size.height);
+                                                         [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"Keyboard.fireOnHiding('keyboardWillHide',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
             weakSelf.keyboardIsVisible = NO;
                                             }];
 
@@ -98,8 +104,11 @@
                                                                  object:nil
                                                                   queue:[NSOperationQueue mainQueue]
                                                              usingBlock:^(NSNotification* notification) {
-                                                CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-                                                keyboardFrame = [self.viewController.view convertRect:keyboardFrame fromView:nil];
+                                                                 [weakSelf performSelector:@selector(shrinkViewKeyboardWillChangeFrame:) withObject:notification afterDelay:0];
+                                                                 CGRect screen = [[UIScreen mainScreen] bounds];
+                                                                 CGRect keyboard = ((NSValue*)notification.userInfo[@"UIKeyboardFrameEndUserInfoKey"]).CGRectValue;
+                                                                 CGRect intersection = CGRectIntersection(screen, keyboard);
+                                                                 CGFloat height = MIN(intersection.size.width, intersection.size.height);
                                                                  [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardHeightWillChange',{ 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
                                                              }];
 
