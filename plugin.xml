@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="com.mostlyepic.cordova-plugin-keyboard" version="1.1.5">
-    <name>Keyboard</name>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="com.mostlyepic.me-keyboard" version="1.0.0">
+    <name>MEKeyboard</name>
     <description>Cordova Keyboard Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,keyboard</keywords>
@@ -17,7 +17,7 @@
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-            <feature name="Keyboard">
+            <feature name="MEKeyboard">
                 <param name="ios-package" value="CDVKeyboard" onload="true" />
             </feature>
         </config-file>
@@ -29,7 +29,7 @@
     <!-- android -->
     <platform name="android">
         <config-file target="config.xml" parent="/*">
-            <feature name="Keyboard">
+            <feature name="MEKeyboard">
                 <param name="android-package" value="org.apache.cordova.labs.keyboard.Keyboard" onload="true" />
             </feature>
         </config-file>
