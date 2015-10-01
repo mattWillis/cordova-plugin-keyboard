@@ -30,6 +30,7 @@
     id _shrinkViewKeyboardWillChangeFrameObserver;
 }
 
+@property (readwrite, assign) BOOL disableScroll;
 @property (readwrite, assign) BOOL shrinkView;
 @property (readwrite, assign) BOOL disableScrollingInShrinkView;
 @property (readwrite, assign) BOOL hideFormAccessoryBar;
