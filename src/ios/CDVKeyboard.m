@@ -33,9 +33,6 @@
 
 @implementation CDVKeyboard
 
-@synthesize hideKeyboardAccessoryBar = _hideKeyboardAccessoryBar;
-@synthesize disableScroll = _disableScroll;
-
 - (id)settingForKey:(NSString*)key
 {
     return [self.commandDelegate.settings objectForKey:[key lowercaseString]];
@@ -46,8 +43,6 @@
 - (void)pluginInitialize
 {
     NSString* setting = nil;
-
-    self.disableScroll = NO;
 
     setting = @"HideKeyboardFormAccessoryBar";
     if ([self settingForKey:setting]) {
@@ -99,7 +94,7 @@
                                                                  object:nil
                                                                   queue:[NSOperationQueue mainQueue]
                                                              usingBlock:^(NSNotification* notification) {
-                                                                 [weakSelf performSelector:@selector(shrinkViewKeyboardWillChangeFrame:) withObject:notification afterDelay:0];
+                                                                 // [weakSelf performSelector:@selector(shrinkViewKeyboardWillChangeFrame:) withObject:notification afterDelay:0];
                                                                 CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
                                                                 keyboardFrame = [self.viewController.view convertRect:keyboardFrame fromView:nil];
                                                                  [weakSelf.commandDelegate evalJs: [NSString stringWithFormat:@"cordova.fireWindowEvent('keyboardHeightWillChange', { 'keyboardHeight': %@ }); ", [@(keyboardFrame.size.height) stringValue]]];
@@ -233,42 +228,6 @@ static IMP originalImp;
 - (void)hide:(CDVInvokedUrlCommand*)command
 {
     [self.webView endEditing:YES];
-}
-
-
-
-- (BOOL)disableScroll {
-    return _disableScroll;
-}
-
-- (void)setDisableScroll:(BOOL)disableScroll {
-    if (disableScroll == _disableScroll) {
-        return;
-    }
-    if (disableScroll) {
-        self.webView.scrollView.scrollEnabled = NO;
-        self.webView.scrollView.delegate = self;
-    }
-    else {
-        self.webView.scrollView.scrollEnabled = YES;
-        self.webView.scrollView.delegate = nil;
-    }
-
-    _disableScroll = disableScroll;
-}
-
-
-
-/* ------------------------------------------------------------- */
-
-- (void) disableScroll:(CDVInvokedUrlCommand*)command {
-    if (!command.arguments || ![command.arguments count]){
-      return;
-    }
-    id value = [command.arguments objectAtIndex:0];
-    if (value != [NSNull null]) {
-      self.disableScroll = [value boolValue];
-    }
 }
 
 #pragma mark dealloc
